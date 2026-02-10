@@ -1,0 +1,66 @@
+<Window x:Class="AacV2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:AacV2.ViewModels"
+        xmlns:views="clr-namespace:AacV2.Views"
+        mc:Ignorable="d"
+        Title="AacV2" Height="900" Width="1400" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:KeyboardViewModel}">
+            <views:KeyboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PhrasesViewModel}">
+            <views:PhrasesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
+            <views:HistoryView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PredictionViewModel}">
+            <views:PredictionView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ComputerControlViewModel}">
+            <views:ComputerControlView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EnvironmentControlViewModel}">
+            <views:EnvironmentControlView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CaregiverViewModel}">
+            <views:CaregiverView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#F3F3F3" CornerRadius="8" Padding="8">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Button Content="ホーム" Command="{Binding NavigateHomeCommand}" />
+                    <Button Content="文字盤" Command="{Binding NavigateKeyboardCommand}" />
+                    <Button Content="フレーズ" Command="{Binding NavigatePhrasesCommand}" />
+                    <Button Content="履歴" Command="{Binding NavigateHistoryCommand}" />
+                    <Button Content="予測" Command="{Binding NavigatePredictionCommand}" />
+                    <Button Content="PC操作" Command="{Binding NavigateComputerCommand}" />
+                    <Button Content="環境制御" Command="{Binding NavigateEnvironmentCommand}" />
+                    <Button Content="設定" Command="{Binding NavigateSettingsCommand}" />
+                    <Button Content="支援者" Command="{Binding NavigateCaregiverCommand}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Column="1" Margin="12,0,0,0" BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Padding="12">
+            <ContentControl Content="{Binding CurrentPage}" />
+        </Border>
+    </Grid>
+</Window>
