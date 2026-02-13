@@ -1,6 +1,7 @@
 import AVFoundation
 import Foundation
 import SwiftUI
+import UIKit
 
 @MainActor
 final class AppStore: ObservableObject {
@@ -76,6 +77,20 @@ final class AppStore: ObservableObject {
 
     func insertText(_ text: String) {
         inputText += text
+    }
+
+    func copyInputToClipboard() {
+        let trimmed = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        UIPasteboard.general.string = trimmed
+    }
+
+    func lineSendURL() -> URL? {
+        let trimmed = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        let encoded = trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        guard !encoded.isEmpty else { return nil }
+        return URL(string: "line://msg/text/\(encoded)")
     }
 
     func addCategory(name: String) {

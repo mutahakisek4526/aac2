@@ -20,6 +20,8 @@ struct RootTabView: View {
 
 struct ConversationView: View {
     @EnvironmentObject private var store: AppStore
+    @Environment(\.openURL) private var openURL
+    @State private var lineStatusMessage: String = ""
 
     var body: some View {
         ScrollView {
@@ -32,12 +34,30 @@ struct ConversationView: View {
                     .background(Color(uiColor: .secondarySystemBackground))
                     .cornerRadius(10)
 
-                HStack {
-                    ActionButton(title: "発話", color: .blue) { store.speakCurrent() }
-                    ActionButton(title: "停止", color: .orange) { store.stopSpeak() }
-                    ActionButton(title: "Undo", color: .gray) { store.undoInput() }
-                    ActionButton(title: "削除", color: .pink) { store.deleteLastWord() }
-                    ActionButton(title: "クリア", color: .red) { store.clearInput() }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ActionButton(title: "発話", color: .blue) { store.speakCurrent() }
+                        ActionButton(title: "停止", color: .orange) { store.stopSpeak() }
+                        ActionButton(title: "Undo", color: .gray) { store.undoInput() }
+                        ActionButton(title: "削除", color: .pink) { store.deleteLastWord() }
+                        ActionButton(title: "クリア", color: .red) { store.clearInput() }
+                        ActionButton(title: "line送信", color: .green) {
+                            store.copyInputToClipboard()
+                            guard let url = store.lineSendURL() else {
+                                lineStatusMessage = "送信する入力がありません"
+                                return
+                            }
+                            openURL(url) { accepted in
+                                lineStatusMessage = accepted ? "LINEを開きました（入力をクリップボードへコピー済み）" : "LINEを開けませんでした"
+                            }
+                        }
+                    }
+                }
+
+                if !lineStatusMessage.isEmpty {
+                    Text(lineStatusMessage)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
                 }
 
                 Text("予測")
